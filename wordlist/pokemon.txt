@@ -8,7 +8,6 @@ Servine
 Groudon
 Darkrai
 Victini
-
 Articuno
 Gyarados
 Garchomp
@@ -19,7 +18,6 @@ Samurott
 Cobalion
 Giratina
 Reshiram
-
 Charizard
 Bulbasaur
 Dragonite
@@ -30,7 +28,6 @@ Infernape
 Cresselia
 Pachirisu
 Spiritomb
-
 Forretress
 Eelektross
 Darmanitan
@@ -41,7 +38,6 @@ Karrablast
 Sandaconda	
 Pincurchin
 Celesteela
-
 Kakuna
 Magmar
 Palkia
