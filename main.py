@@ -24,7 +24,6 @@ def take_char():
     char = input("You have to insert a letter[a-z]: ")
   return char.lower()
 
-
 def main():
   attempts = 0
   mode = take_mode()
@@ -36,14 +35,24 @@ def main():
   print("Loading mode...\n\n")
     
   string_to_guess = take_word(mode[1])
-  dashed_str = len(string_to_guess)*'-'
-
+  dashed_list = list(len(string_to_guess)*'-')
 #Game loop. Later will become a function
-  while attempts < 7 or dashed_str != string_to_guess:
+  while attempts < 6 and "".join(dashed_list) != string_to_guess:
     print(ART[attempts]+ '\n')
-    print(dashed_str)
+    print("".join(dashed_list))
     char = take_char()
 
+    if char in string_to_guess:
+      for i in range(len(string_to_guess)):
+        if string_to_guess[i] == char:
+          dashed_list[i] = char
+    else:
+      attempts += 1
+     
+    print("".join(dashed_list))
+    for _ in range(100):
+      print()
+    
 
     
   
