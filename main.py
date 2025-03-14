@@ -1,5 +1,6 @@
 from random import choice
 from ascii_art import ART
+import os
 
 def take_mode():
   mode = input("Select a mode:\nType 'P' for pokemon mode\nType 'G' for ghibli mode\nType 'C' for custom mode: ").lower()
@@ -18,11 +19,30 @@ def take_word(mode: str):
     return str_to_guess
 
 #Continue to prompt if there is a wrong input(word or not alphabetic character)
-def take_char():
+def take_char(prev_letters: list):
   char = input("Insert a letter: ")
+
+
+#I have to handle the case where the user enter a letter, already entered in the past
+  #if char in prev_letters:
+    #char = input("")
+
+
+
   while not char.isalpha() or len(char) > 1:
-    char = input("You have to insert a letter[a-z]: ")
+    if char in prev_letters:
+      char = input("You already typed that letter, try another one: ")
+    else:
+      char = input("You have to insert a letter[a-z]: ")
   return char.lower()
+
+def display_entered_letters(prev_letters: list):
+  print("Letters already entered:", end="")
+  for letter in prev_letters:
+    print(f" {letter}", end="")
+  print("\n\n")
+
+
 
 def main():
   attempts = 0
@@ -37,10 +57,15 @@ def main():
   string_to_guess = take_word(mode[1])
   dashed_list = list(len(string_to_guess)*'-')
 #Game loop. Later will become a function
+  prev_letters = []
   while attempts < 6 and "".join(dashed_list) != string_to_guess:
     print(ART[attempts]+ '\n')
     print("".join(dashed_list))
-    char = take_char()
+    if prev_letters:
+      display_entered_letters(prev_letters)
+    char = take_char(prev_letters)
+    prev_letters.append(char)
+
 
     if char in string_to_guess:
       for i in range(len(string_to_guess)):
@@ -50,8 +75,9 @@ def main():
       attempts += 1
      
     print("".join(dashed_list))
-    for _ in range(100):
-      print()
+
+    os.system('cls' if os.name == 'nt' else 'clear')
+    #print("\x1B[H\x1B[2J\x1B[3J", end="", flush=True)
     
 
     
