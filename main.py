@@ -12,36 +12,77 @@ def take_mode():
 
 def take_word(mode: str):
   if mode == 'p':
-    with open("./wordlist/pokemon.txt") as pokemon_file:
-      list_of_pokemon = pokemon_file.readlines()
-      str_to_guess = choice(list_of_pokemon).lower().strip()
+    try:
+      with open("./wordlist/pokemon.txt") as pokemon_file:
+        list_of_pokemon = pokemon_file.readlines()
+        str_to_guess = choice(list_of_pokemon).lower().strip()
+        return str_to_guess
+    except FileNotFoundError:
+      print("File 'pokemon.txt' not found in the directory wordlist.")
+      exit()
+  elif mode == 'g':
+    try:
+      with open("./wordlist/ghibli.txt") as ghibli_file:
+        list_of_ghibli = ghibli_file.readlines()
+        str_to_guess = choice(list_of_ghibli).lower().strip()
+        return str_to_guess
+    except FileNotFoundError:
+      print("File 'ghibli.txt' not found in the directory wordlist.")
+      exit()
+  else:
+    try:
+      with open("./wordlist/custom.txt") as custom_file:
+        list_of_custom = custom_file.readlines()
+        str_to_guess = choice(list_of_custom).lower().strip()
+        return str_to_guess
+    except FileNotFoundError:
+      print("File 'custom.txt' not found in the directory wordlist.")
+      exit()
 
-    return str_to_guess
 
 #Continue to prompt if there is a wrong input(word or not alphabetic character)
-def take_char(prev_letters: list):
+def take_char():
   char = input("Insert a letter: ")
-
-
-#I have to handle the case where the user enter a letter, already entered in the past
-  #if char in prev_letters:
-    #char = input("")
-
-
-
   while not char.isalpha() or len(char) > 1:
-    if char in prev_letters:
-      char = input("You already typed that letter, try another one: ")
-    else:
-      char = input("You have to insert a letter[a-z]: ")
+    char = input("You have to insert a letter[a-z]: ")
   return char.lower()
 
+
 def display_entered_letters(prev_letters: list):
+  print()
   print("Letters already entered:", end="")
   for letter in prev_letters:
     print(f" {letter}", end="")
   print("\n\n")
 
+
+def clear_screen():
+  os.system('cls' if os.name == 'nt' else 'clear')
+  #print("\x1B[H\x1B[2J\x1B[3J", end="", flush=True)
+
+
+
+def game_loop(attempts: int, dashed_list: list, string_to_guess: str):
+  prev_letters = []
+  while attempts < len(ART) - 1 and "".join(dashed_list) != string_to_guess:
+    print(ART[attempts]+ '\n')
+    print("".join(dashed_list))
+    if prev_letters:
+      display_entered_letters(prev_letters)
+    char = take_char()
+    if char in prev_letters:
+      print("You already typed this letter.")
+      continue
+    prev_letters.append(char)
+
+    if char in string_to_guess:
+      for i in range(len(string_to_guess)):
+        if string_to_guess[i] == char:
+          dashed_list[i] = char
+    else:
+      attempts += 1
+     
+    print("".join(dashed_list))
 
 
 def main():
@@ -56,30 +97,8 @@ def main():
     
   string_to_guess = take_word(mode[1])
   dashed_list = list(len(string_to_guess)*'-')
-#Game loop. Later will become a function
-  prev_letters = []
-  while attempts < 6 and "".join(dashed_list) != string_to_guess:
-    print(ART[attempts]+ '\n')
-    print("".join(dashed_list))
-    if prev_letters:
-      display_entered_letters(prev_letters)
-    char = take_char(prev_letters)
-    prev_letters.append(char)
+  game_loop(attempts, dashed_list, string_to_guess)
 
 
-    if char in string_to_guess:
-      for i in range(len(string_to_guess)):
-        if string_to_guess[i] == char:
-          dashed_list[i] = char
-    else:
-      attempts += 1
-     
-    print("".join(dashed_list))
 
-    os.system('cls' if os.name == 'nt' else 'clear')
-    #print("\x1B[H\x1B[2J\x1B[3J", end="", flush=True)
-    
-
-    
-  
 main()
