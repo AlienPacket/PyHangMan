@@ -61,10 +61,10 @@ def clear_screen():
   #print("\x1B[H\x1B[2J\x1B[3J", end="", flush=True)
 
 
-
 def game_loop(attempts: int, dashed_list: list, string_to_guess: str):
   prev_letters = []
   while attempts < len(ART) - 1 and "".join(dashed_list) != string_to_guess:
+
     print(ART[attempts]+ '\n')
     print("".join(dashed_list))
     if prev_letters:
@@ -81,9 +81,15 @@ def game_loop(attempts: int, dashed_list: list, string_to_guess: str):
           dashed_list[i] = char
     else:
       attempts += 1
-     
-    print("".join(dashed_list))
 
+    print("".join(dashed_list))
+    clear_screen()
+  if "".join(dashed_list) != string_to_guess:
+      print("You lost. Try again!")
+      print(f"The word to guess was: {string_to_guess}")
+  else:
+      print(f"Congrats, you win!")
+      print(f"The word you guesses was: {string_to_guess}")
 
 def main():
   attempts = 0
@@ -94,11 +100,9 @@ def main():
     print(mode[1]+ '\n')
     mode = take_mode()
   print("Loading mode...\n\n")
-    
+
   string_to_guess = take_word(mode[1])
   dashed_list = list(len(string_to_guess)*'-')
   game_loop(attempts, dashed_list, string_to_guess)
-
-
 
 main()
